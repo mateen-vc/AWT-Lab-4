@@ -297,8 +297,8 @@ A persistent, unidirectional push channel implementing:
 
 ### 1. Clone Repository
 ```bash
-git clone <repository-url>
-cd As4
+git clone https://github.com/mateen-vc/AWT-Lab-4.git
+cd AWT-Lab-4
 ```
 
 ### 2. Install Dependencies
