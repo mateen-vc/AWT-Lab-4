@@ -1,0 +1,110 @@
+### Real-Time Order Tracker & Live Support System - API Test Suite
+### Base URL
+@baseUrl = http://localhost:5000
+
+### 1. Health Check (Deliverable 21)
+GET {{baseUrl}}/health
+
+### 2. REST API: Get Products Catalog (Deliverable 1)
+GET {{baseUrl}}/api/v1/products
+
+### 3. REST API: Get All Orders
+GET {{baseUrl}}/api/v1/orders
+
+### 4. REST API: Filter Orders by Customer
+GET {{baseUrl}}/api/v1/orders?customerId=cust_01
+
+### 5. REST API: Filter Orders by Status
+GET {{baseUrl}}/api/v1/orders?status=pending
+
+### 6. REST API: Create New Order (Deliverable 1, Step 2)
+POST {{baseUrl}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "customerId": "cust_01",
+  "customerName": "Alex Johnson",
+  "customerEmail": "alex.johnson@example.com",
+  "items": [
+    {
+      "productId": "sample_p1",
+      "name": "TitanPulse Pro ANC Headphones",
+      "price": 249.99,
+      "quantity": 1
+    }
+  ],
+  "totalAmount": 249.99,
+  "shippingAddress": {
+    "street": "100 University Ave, Apt 4B",
+    "city": "Palo Alto",
+    "state": "CA",
+    "zip": "94301"
+  }
+}
+
+### 7. REST API: Update Order Status (PATCH) (Deliverable 1, Step 5)
+# Replace {{orderId}} with actual ID from create order
+PATCH {{baseUrl}}/api/v1/orders/YOUR_ORDER_ID_HERE
+Content-Type: application/json
+
+{
+  "status": "shipped",
+  "note": "Package picked up by carrier courier",
+  "updatedBy": "Agent Marcus Ray"
+}
+
+### 8. JSON-RPC 2.0: Cancel Order (Mandatory Deliverable 3, Step 12)
+POST {{baseUrl}}/rpc
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "cancelOrder",
+  "params": {
+    "orderId": "YOUR_ORDER_ID_HERE",
+    "reason": "Customer requested cancellation via JSON-RPC"
+  },
+  "id": 1
+}
+
+### 9. JSON-RPC 2.0: Get Order Details
+POST {{baseUrl}}/rpc
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "getOrder",
+  "params": {
+    "orderId": "YOUR_ORDER_ID_HERE"
+  },
+  "id": 2
+}
+
+### 10. JSON-RPC 2.0: Get Order Status
+POST {{baseUrl}}/rpc
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "getOrderStatus",
+  "params": {
+    "orderId": "YOUR_ORDER_ID_HERE"
+  },
+  "id": 3
+}
+
+### 11. JSON-RPC 2.0: Invalid Method Test (Expect Error -32601)
+POST {{baseUrl}}/rpc
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "unknownMethodName",
+  "params": {},
+  "id": 4
+}
+
+### 12. Server-Sent Events (SSE) Stream (Deliverable 4, 7)
+# Run in terminal: curl -N -H "Accept: text/event-stream" http://localhost:5000/events
+GET {{baseUrl}}/events
+Accept: text/event-stream
