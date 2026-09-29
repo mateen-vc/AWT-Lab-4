@@ -1,0 +1,16 @@
+# The React (Vite) frontend lives in client/. Netlify only hosts the frontend;
+# the Express + Socket.io backend in server/ must be hosted separately and its
+# URL provided via the VITE_API_URL / VITE_SOCKET_URL environment variables.
+[build]
+  base = "client"
+  command = "npm install --include=dev && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback so client-side routes don't 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
